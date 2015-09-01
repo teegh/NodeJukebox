@@ -93,11 +93,11 @@ app.get('/Queue/*/Tracks/', function(req, res){
 });
 
 app.get('/', function(req, res){
-	res.sendfile('default.htm');
+	res.sendFile('default.htm', { root: __dirname });
 });
 
 app.get('/Download/:id/download.mp3', function(req, res){
-	res.sendfile(filesInfo[req.params.id].Path);
+	res.sendFile(filesInfo[req.params.id].Path, { root: __dirname });
 });
 
 function enumerate(dictionary){
@@ -126,37 +126,41 @@ function index(value, dictionary){
 		if (dictionary[value]){
 			dictionary[value] += 1;
 		} else {
-			dictionary[value] = 1;				
+			dictionary[value] = 1;
 		}
 	}
 }
 
 if (process.argv.length > 2){
 	for(var i = 2; i < process.argv.length; i++){
-		searchFiles(process.argv[i]);		
+		searchFiles(process.argv[i]);
 	}
 } else {
-	searchFiles(process.env.HOME || ".");		
+	searchFiles(process.env.HOME || ".");
 }
 
 
 
 function searchFiles(cwd) {
-  var options = {cwd: cwd, nonull: false, nocase: true, root: "."};
-  glob("**/*.mp3", options, function (error, files) {
+  // var options = {cwd: cwd, nonull: false, nocase: true, root: "."};
+  // glob("**/*.mp3", options, function (error, files) {
+  glob("**/*.mp3", function (error, files) {
   	if (error) {
   		console.error(error);
   	}
+  	console.log(cwd);
   	console.log(files.length + " tracks found");
     files.forEach(function(filepath){
 
     	console.log(filepath)
-      	tracklist.list(cwd + '/' + filepath, function (err, result) {
+      	// tracklist.list(cwd + '/' + filepath, function (err, result) {
+      	tracklist.list(filepath, function (err, result) {
 
         if(result) {
         	result.plays = 0;
 			result.Id = filesInfo.length;
-			result.Path = cwd + '/' + filepath;
+			// result.Path = cwd + '/' + filepath;
+			result.Path = filepath;
 			filesInfo.push(result);
 			index(result.genre, genres);
 			index(result.artist, artists);
@@ -168,8 +172,8 @@ function searchFiles(cwd) {
   });
 }
 
-function done(error, stdout, stderr) 
-{ 
+function done(error, stdout, stderr)
+{
 	currentTrack = undefined;
 	if (playQueue.length > 0){
 		setTimeout(function(){ play(); }, 0);
@@ -180,7 +184,7 @@ function play(){
 	if (currentTrack){
 		return;
 	}
-	currentTrack = playQueue.pop();	
+	currentTrack = playQueue.pop();
 	currentTrack.plays += 1;
 	console.log("playing " + currentTrack.Path);
 	childProcess.exec('mpg123 "' + currentTrack.Path + '"', done);

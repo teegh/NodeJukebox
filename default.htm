@@ -2,11 +2,11 @@
 <html>
 	<head>
 		<title>Jukebox</title>
-        <meta name="viewport" content="width=device-width, initial-scale=0.5"> 
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-		<script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore.js"></script>
-		<script type="text/javascript" src="http://documentcloud.github.com/backbone/backbone.js"></script>
-        <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=0.5">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.2/backbone-min.js"></script>
+        <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
         <link href='http://fonts.googleapis.com/css?family=Playball' rel='stylesheet' type='text/css'/>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
         <style type="text/css">
@@ -27,17 +27,17 @@ input
 }
 a
 {
-    color:#40C4FF;    
+    color:#40C4FF;
 }
 #body
 {
-    width:600px;    
+    width:600px;
     margin-left:30px;
 }
 .title
 {
-    width:600px;  
-    font-size:80px;    
+    width:600px;
+    font-size:80px;
     margin-left:30px;
     font-family: 'Playball', cursive;
     text-decoration:none;
@@ -45,12 +45,12 @@ a
 }
 .subtitle
 {
-    margin-top:-30px;    
+    margin-top:-30px;
     margin-left:60px;
 }
 h2
 {
-    font-size:40px;    
+    font-size:40px;
     margin-top:0px;
     margin-bottom:0px;
     font-family: 'Open Sans', sans-serif;
@@ -58,7 +58,7 @@ h2
 }
 a
 {
-    text-decoration:none;    
+    text-decoration:none;
 }
 a:hover
 {
@@ -66,10 +66,10 @@ a:hover
 }
 .current
 {
-    margin:30px;    
+    margin:30px;
 }
         </style>
-    </head> 
+    </head>
 	<body>
         <div class="title"><a href="#">Jukebox</a></div>
         <div class="subtitle">web music server</div>
@@ -192,11 +192,11 @@ a:hover
                 controllers.defaultAction();
                 poll();
             });
-			
+
 		</script>
         <script id="default" type="text/x-jquery-tmpl">
-     
-            <input id="Search" onkeypress="if ((event.keyCode || event.which) == 13) {window.location = '#/Search/' + $('#Search').val();}"/> <a href="javascript:void();" onclick="window.location = '#/Search/' + $('#Search').val()">Search</a><br/>
+
+            <input id="Search" onkeypress="if ((event.keyCode || event.which) == 13) {window.location = '#/Search/' + $('#Search').val();}"/> <a href="javascript:void(0);" onclick="window.location = '#/Search/' + $('#Search').val()">Search</a><br/>
 			<br/>
             <h2>What's playing?</h2>
             <div><a href="#/Songs/Current/Now_playing">Now playing</a></div>
@@ -206,9 +206,9 @@ a:hover
 			<div><a href="#/List/Genre">Browse by genre</a></div>
 			<div><a href="#/List/Artist">Browse by artist</a></div>
 			<div><a href="#/List/Album">Browse by album</div>
-        
+
         </script>
-		
+
 		<script id="list" type="text/x-jquery-tmpl">
 			<h2>${title}</h2>
 			<ul>
@@ -226,7 +226,7 @@ a:hover
 				{{each items}}
 				<li>
 					<a href="#/Song/${$value.Id}">${$value.title}</a> by <a href="#/Songs/Artist/${$value.artist}">${$value.artist}</a>
-				    <span id="${$value.Id}"><a href="javascript:void();" onclick="controllers.play('${$value.Id}')">&#9654;</a></span>
+				    <span id="${$value.Id}"><a href="javascript:void(0);" onclick="controllers.play('${$value.Id}')">&#9654;</a></span>
                 </li>
 				{{/each}}
 			</ul>
@@ -238,15 +238,15 @@ a:hover
 			{{/each}}
         </script>
 
-        
+
         <script id="searchResults" type="text/x-jquery-tmpl">
 			<h2>${title}</h2>
-            <input value="${value}" id="Search" onkeypress="if ((event.keyCode || event.which) == 13) {window.location = '#/Search/' + $('#Search').val();}"/> <a href="javascript:void();" onclick="window.location = '#/Search/' + $('#Search').val()">Search</a><br/>
+            <input value="${value}" id="Search" onkeypress="if ((event.keyCode || event.which) == 13) {window.location = '#/Search/' + $('#Search').val();}"/> <a href="javascript:void(0);" onclick="window.location = '#/Search/' + $('#Search').val()">Search</a><br/>
 			<ul>
 				{{each items}}
 				<li>
 					<a href="#/Song/${$value.Id}">${$value.title}</a> by <a href="#/Songs/Artist/${$value.artist}">${$value.artist}</a>
-				    <span id="${$value.Id}"><a href="javascript:void();" onclick="controllers.play('${$value.Id}')">&#9654;</a></span>
+				    <span id="${$value.Id}"><a href="javascript:void(0);" onclick="controllers.play('${$value.Id}')">&#9654;</a></span>
 				</li>
 				{{/each}}
 			</ul>
@@ -259,7 +259,7 @@ a:hover
             <a href="#/Songs/Genre/${song.genre}">${song.genre}</a> Genre<br/>
             ${song.plays} Plays<br/>
             <br/>
-			<span id="${song.Id}"><a href="javascript:void();" onclick="controllers.play('${song.Id}')">&#9654; Play</a></span>&nbsp;&nbsp;&nbsp;
+			<span id="${song.Id}"><a href="javascript:void(0);" onclick="controllers.play('${song.Id}')">&#9654; Play</a></span>&nbsp;&nbsp;&nbsp;
             <a href="/Download/${song.Id}/download.mp3" type="audio/mpeg">&#9660; Download</a><br/><br/>
         </script>
 
