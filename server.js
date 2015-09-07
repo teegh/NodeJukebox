@@ -1,21 +1,20 @@
-var express = require('express');
-var glob = require('glob');
-var tracklist = require('tracklist');
-var sys = require('util')
-var childProcess = require('child_process');
+var express 			= require('express');
+var glob 					= require('glob');
+var tracklist 		= require('tracklist');
+var sys 					= require('util')
+var childProcess 	= require('child_process');
 
-var app = express();
-var filesInfo = [];
-var artists = {};
-var genres = {};
-var albums = {};
-var playQueue = [];
-var currentTrack = undefined;
+var app 					= express();
+var filesInfo 		= [];
+var artists 			= {};
+var genres 				= {};
+var albums 				= {};
+var playQueue 		= [];
+var currentTrack 	= undefined;
 
 app.get('/Artist/', function(req,res){
 	res.json(enumerate(artists));
 });
-
 
 app.get('/Artist/:artist/Tracks', function(req,res){
 	res.json(search(req.params.artist, "artist"));
@@ -28,7 +27,6 @@ app.get('/Genre/', function(req,res){
 app.get('/Genre/:genre/Tracks', function(req,res){
 	res.json(search(req.params.genre, "genre"));
 });
-
 
 app.get('/Album/', function(req,res){
 	res.json(enumerate(albums));
@@ -51,6 +49,7 @@ app.get('/tracks/search/:string', function(req,res){
 	res.json(results);
 });
 
+
 app.post('/play/:id', function(req,res){
 	var results = [];
 	var file = filesInfo[req.params.id];
@@ -63,6 +62,8 @@ app.post('/play/:id', function(req,res){
 
 	res.json({ok:true});
 });
+
+
 
 app.get('/Current/*', function(req, res){
 	var result = [];
@@ -82,6 +83,7 @@ app.get('/Popular/*', function(req, res){
 	results.sort(function(a,b){b.plays - a.plays});
 	res.json(results);
 });
+
 
 
 app.get('/Song/:id', function(req, res){
@@ -144,7 +146,7 @@ if (process.argv.length > 2){
 function searchFiles(cwd) {
   // var options = {cwd: cwd, nonull: false, nocase: true, root: "."};
   // glob("**/*.mp3", options, function (error, files) {
-  glob("**/*.mp3", function (error, files) {
+  glob("**/*.{mp3,MP3}", function (error, files) {
   	if (error) {
   		console.error(error);
   	}
@@ -156,18 +158,20 @@ function searchFiles(cwd) {
       	// tracklist.list(cwd + '/' + filepath, function (err, result) {
       	tracklist.list(filepath, function (err, result) {
 
-        if(result) {
-        	result.plays = 0;
-			result.Id = filesInfo.length;
-			// result.Path = cwd + '/' + filepath;
-			result.Path = filepath;
-			filesInfo.push(result);
-			index(result.genre, genres);
-			index(result.artist, artists);
-			index(result.album, albums);
-	    }
+	        if(result) {
+	        	result.plays = 0;
+						result.Id = filesInfo.length;
+						// result.Path = cwd + '/' + filepath;
+						result.Path = filepath;
+						filesInfo.push(result);
+						index(result.genre, genres);
+						index(result.artist, artists);
+						console.log("artist -> "+result.artist );
+						index(result.album, albums);
+			    }
 
-      });
+      	});
+
     });
   });
 }
